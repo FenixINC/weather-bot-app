@@ -19,7 +19,7 @@ dispatcher = Dispatcher(bot)
 async def start(message: types.Message):
     await bot.send_message(
         chat_id=message.chat.id,
-        text="Hello!",
+        text="Hello! Please, choose city to get weather",
         reply_markup=telegram_keyboard.keyboard_client
     )
 
@@ -27,6 +27,35 @@ async def start(message: types.Message):
 @dispatcher.message_handler(commands=["Lviv"])
 async def get_weather_for_lviv(message: types.Message):
     weather_response = weather_controller.get_weather_data(city="lviv", imperial=False)
+
+    if isinstance(weather_response, WeatherResponse):
+        city = weather_response.name
+        temperature = weather_response.temperature
+        weather_symbol = weather_controller.select_weather_display_params(weather_response.id)
+
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text=f"<b>{city}</b>: {weather_symbol} {weather_response.description.capitalize()}, {temperature}°C",
+            parse_mode=types.ParseMode.HTML
+        )
+    elif isinstance(weather_response, ErrorResponse):
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text=f"{weather_response.error_message}"
+        )
+
+
+@dispatcher.message_handler(commands=["Another_City"])
+async def handle_button_another_city(message: types.Message):
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text="Enter another city:"
+    )
+
+
+@dispatcher.message_handler()
+async def get_weather_for_another_city(message: types.Message):
+    weather_response = weather_controller.get_weather_data(city=message.text, imperial=False)
 
     if isinstance(weather_response, WeatherResponse):
         city = weather_response.name
