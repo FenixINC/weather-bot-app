@@ -13,3 +13,8 @@ def get_api_key():
     config = ConfigParser()
     config.read(SECRETS_INI_FILE)
     return config["openweather"]["api_key"]
+
+def get_telegram_token():
+    config = ConfigParser()
+    config.read(SECRETS_INI_FILE)
+    return config["openweather"]["telegram_token"]

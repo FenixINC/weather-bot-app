@@ -6,6 +6,14 @@ from data import weather_api
 from data.response.ErrorResponse import ErrorResponse
 from data.response.WeatherResponse import WeatherResponse
 
+THUNDERSTORM = range(200, 300)
+DRIZZLE = range(300, 400)
+RAIN = range(500, 600)
+SNOW = range(600, 700)
+ATMOSPHERE = range(700, 800)
+CLEAR = range(800, 801)
+CLOUDY = range(801, 900)
+
 
 def get_weather_data(city, imperial):
     try:
@@ -65,3 +73,24 @@ def get_weather_data(city, imperial):
             error_code=400
         )
         return error_response
+
+
+def select_weather_display_params(weather_id):
+    # TODO: rewrite to 'match case'
+    if weather_id in THUNDERSTORM:
+        display_params = "💥️"
+    elif weather_id in DRIZZLE:
+        display_params = "💧️"
+    elif weather_id in RAIN:
+        display_params = "💦️"
+    elif weather_id in SNOW:
+        display_params = "⛄️"
+    elif weather_id in ATMOSPHERE:
+        display_params = "🌀️"
+    elif weather_id in CLEAR:
+        display_params = "🔆️"
+    elif weather_id in CLOUDY:
+        display_params = "💨️"
+    else:  # In case the API adds new weather codes
+        display_params = "🌈️"
+    return display_params

@@ -17,7 +17,7 @@ def get_weather_url_by_city_name(city_input, imperial=False):
     """
 
     api_key = api_config.get_api_key()
-    city_name = " ".join(city_input)
+    city_name = "".join(city_input)
     url_encoded_city_name = parse.quote_plus(city_name)
     units = "imperial" if imperial else "metric"
     url = f"{BASE_WEATHER_API_URL}?q={url_encoded_city_name}"f"&units={units}&appid={api_key}"
